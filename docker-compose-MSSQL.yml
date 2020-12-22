@@ -1,0 +1,31 @@
+##Create the docker compose file for mssql
+<< vi docker-compose-application.yml
+-----------------------------------------------------------------------------
+
+version: "3.7"
+
+services:
+  database:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    ports:
+      - 6554:1433
+    environment:
+      TZ: 'Asia/Kathmandu'
+      SA_PASSWORD: '~Cdcr_@123#'
+      ACCEPT_EULA: 'Y'
+    volumes:
+      - /app/data/mssql:/var/opt/sqlserver/data
+    networks:
+      - portal
+     
+networks:
+  portal:
+
+
+----------------------------------------------------------------------------------------------------
+## note you have to change the ownership of volume mapped directory /app/data/mssql directory to 1001
+chown -R 10001. /app/data/mssql
+
+##now deploy with stack
+<< vi deploy-infrastructure-server.sh
+docker stack deploy --compose-file docker-compose-infrastructure.yml CQNOVAL
